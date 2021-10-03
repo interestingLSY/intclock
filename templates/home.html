@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %} 主页 {% endblock %}
+{% block head %}
+<style>
+body{
+    font-size: 20px;
+    font-family: 'Lato';
+}
+</style>
+{% endblock %}
+{% block body %}
+<!--
+size of body: 568x678
+-->
+<div style="width: 100%">
+    <div style="width: 100%">
+        <div>
+    		<div style="margin-top: 40px; text-align: center; letter-spacing: 2px;" onclick="ToggleShowSecond()">
+    			<span id="nowtime-hours" style="font-size: 120px"></span>
+                <span id="nowtime-colon" style="font-size: 60px; position: relative; top: -24px; display: inline-block; width: 32px; text-align: center">:</span>
+    			<span id="nowtime-minutes" style="font-size: 120px"></span>
+                <span id="nowtime-second-container">
+                    <span id="nowtime-second-colon" style="font-size: 60px; position: relative; top: -24px; display: inline-block; width: 32px; text-align: center">:</span>
+                    <span id="nowtime-second" style="font-size: 120px"></span>
+                </span>
+    		</div>
+            <div style="margin-top: 2px; text-align: center; font-size: 22px;">
+    			<span id="nowtime-month" style="font-size: 22px"></span>/<span id="nowtime-date" style="font-size: 22px"></span>
+    			星期<span id="nowtime-day" style="font-size: 22px"></span>
+    		</div>
+            <script>
+                var dayToChar = "日一二三四五六";
+                var kindleTimezoneCompensate = (new Date()).getTimezoneOffset() == 0 ? +8 : 0;
+                
+                var showSecond = true;
+                function ToggleShowSecond(){
+                    showSecond = !showSecond;
+                    if(!showSecond){
+                        $("#nowtime-second-container").attr("hidden","hidden");
+                    }else{
+                        $("#nowtime-second-container").removeAttr("hidden");
+                    }
+                }
+                ToggleShowSecond();
+                
+    			function UpdateNowtime(){
+    				function ToFixedLength(x){ return x < 10 ? "0"+x : x; }
+    				var date = new Date();
+    				$("#nowtime-month").text(date.getMonth()+1)
+    				$("#nowtime-date").text(date.getDate())
+    				$("#nowtime-hours").text(ToFixedLength(date.getHours()+kindleTimezoneCompensate))
+    				$("#nowtime-minutes").text(ToFixedLength(date.getMinutes()))
+                    $("#nowtime-day").text(dayToChar[date.getDay()])
+                    if(showSecond){
+                        $("#nowtime-second").text(ToFixedLength(date.getSeconds()))
+                    }
+    			}
+                UpdateNowtime()
+    			setInterval(function(){UpdateNowtime()},1000)
+                function UpdateColonState(){
+                    if( $("#nowtime-colon").css("visibility") == "hidden" ){
+                        $("#nowtime-colon").css("visibility","visible")
+                        if(showSecond) $("#nowtime-second-colon").css("visibility","visible")
+                    }else{
+                        $("#nowtime-colon").css("visibility","hidden");
+                        if(showSecond) $("#nowtime-second-colon").css("visibility","hidden")
+                    }
+                }
+                setInterval(function(){UpdateColonState()},2000)
+    		</script>
+        </div>
+    </div>
+    <hr style="margin-top: 52px; "/>
+    <div style="width: 100%; margin-top: 16px">
+        <div style="width: 37%; display: inline-block;">
+            1
+        </div>
+        <div style="width: 60%; display: inline-block">
+            <div id="hitokoto-container" style="text-align: center" onclick="RefreshHitokoto()">
+                <div id="hitokoto-content" style="font-size: 20px; line-height: 30px;"></div>
+        		<div id="hitokoto-from" style="font-size: 16px;"></div>
+                <script>
+                    function RefreshHitokoto(){
+                        $.get('https://v1.hitokoto.cn/?encode=json',function(data){
+                            $('#hitokoto-content').text(data.hitokoto);
+                            if( data.from && data.from_who ){
+                                $('#hitokoto-from').text('—— ' + data.from + '  ' + data.from_who);
+                            }else if( data.from ){
+                                $('#hitokoto-from').text('—— ' + data.from);
+                            }else if( data.from_who ){
+                                $('#hitokoto-from').text('—— ' + data.from_who);
+                            }
+                        })
+                    }
+                    RefreshHitokoto()
+                    $("#hitokoto-refresh").click(function(){RefreshHitokoto()})
+                </script>
+            </div>
+            <div id="calendar" style="text-align: center" onclick="">
+                
+                <script>
+                    
+                </script>
+            </div>
+        </div>
+        <script>
+            var x = $("body");
+            // $("#debugger").html(x.css("width"))
+        </script>
+    </div>
+</div>
+<script>
+    
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <title> {% block title %}{% endblock %} </title>
+    {% block head %}{% endblock %}
+</head>
+<body style="margin: 30px 16px 0px 16px; height: 678px">
+    <div style="font-size: 30px" id="debugger"></div>
+	{% block body %}{% endblock %}
+</body>
+</html>
